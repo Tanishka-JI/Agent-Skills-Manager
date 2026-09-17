@@ -26,6 +26,7 @@ export let SKILLS:Skill[]=[
 ];
 
 export async function getSkill(){
+    await new Promise((resolve)=>setTimeout(resolve,3000))
     return [...SKILLS]
 }
 
