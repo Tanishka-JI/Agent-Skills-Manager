@@ -1,0 +1,30 @@
+datasource db{
+  provider = "postgresql"
+}
+generator client {
+provider = "prisma-client-js"
+}
+model User{
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password      String
+  name     String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+  skills Skill[]
+}
+
+model Skill{
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  description String  @db.VarChar(255)
+  content   String  @db.Text
+  isPublic Boolean  @default(false) @map("is_public")
+  authorId  Int      @map("author_id")
+  author    User     @relation(fields: [authorId], references: [id])
+  @@map("skills")
+}
+
+
+
