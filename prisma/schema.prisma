@@ -23,6 +23,7 @@ model Skill{
   isPublic Boolean  @default(false) @map("is_public")
   authorId  Int      @map("author_id")
   author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
   @@map("skills")
 }
 
