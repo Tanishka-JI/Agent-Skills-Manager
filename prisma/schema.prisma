@@ -10,6 +10,7 @@ model User{
   password      String
   name     String
   createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
   skills Skill[]
@@ -24,6 +25,7 @@ model Skill{
   authorId  Int      @map("author_id")
   author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
   @@map("skills")
 }
 
