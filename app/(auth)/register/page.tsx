@@ -1,5 +1,5 @@
 "use client";
-
+import { Eye, EyeOff } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -18,13 +18,15 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // Redirect if already authenticated
   useEffect(() => {
-  if (!isLoading && isAuthenticated) {
-    router.push("/dashboard");
-  }
-}, [isLoading, isAuthenticated, router]);
+    if (!isLoading && isAuthenticated) {
+      router.push("/dashboard");
+    }
+  }, [isLoading, isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,33 +96,57 @@ export default function RegisterPage() {
           />
         </div>
 
+        
         <div className="form-control mt-4">
           <label className="label">
             <span className="label-text">Password</span>
           </label>
-          <input
-            type="password"
-            placeholder="••••••••"
-            className="input input-bordered w-full"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              className="input input-bordered w-full pr-12"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              autoComplete="new-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-base-content"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
         </div>
 
+     
         <div className="form-control mt-4">
           <label className="label">
             <span className="label-text">Confirm Password</span>
           </label>
-          <input
-            type="password"
-            placeholder="••••••••"
-            className="input input-bordered w-full"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
+          <div className="relative">
+            <input
+              type={showConfirm ? "text" : "password"}
+              placeholder="••••••••"
+              className="input input-bordered w-full pr-12"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              autoComplete="new-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirm(!showConfirm)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-base-content"
+              aria-label={showConfirm ? "Hide password" : "Show password"}
+            >
+              {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
         </div>
 
         <div className="form-control mt-6">
