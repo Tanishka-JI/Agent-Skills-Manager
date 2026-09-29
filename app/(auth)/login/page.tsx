@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from  "../../hooks/useAuth";
+import {useEffect} from "react";
 
 /**
  * Login Page - CSR (Client-Side Rendering)
@@ -18,10 +19,14 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Redirect if already authenticated
+ 
+
+// useState wali lines ke neeche:
+useEffect(() => {
   if (!isLoading && isAuthenticated) {
     router.push("/dashboard");
-    return null;
   }
+}, [isLoading, isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

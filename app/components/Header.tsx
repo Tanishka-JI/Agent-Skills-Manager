@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { useAuth } from "../hooks/useAuth";
 
+const navLink =
+  "text-sm rounded-md hover:bg-base-300 hover:text-primary transition-colors";
+
 export default function Header() {
   const { isAuthenticated, user, logout, isLoading } = useAuth();
 
   return (
-    <div className="navbar bg-base-200 shadow-lg">
+    <div className="navbar bg-base-200/60 backdrop-blur border-b border-base-300 px-4">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -28,7 +31,7 @@ export default function Header() {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box 'z-1' mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-10 mt-3 w-52 p-2"
           >
             <li>
               <Link href="/skills">Browse Skills</Link>
@@ -40,43 +43,49 @@ export default function Header() {
             )}
           </ul>
         </div>
-        <Link href="/" className="btn btn-ghost text-xl">
-          🤖 Agent Skills
+
+        <Link href="/" className="btn btn-ghost text-xl px-2 gap-2">
+          <span>🤖</span>
+          <span className="font-semibold">Agent Skills</span>
         </Link>
       </div>
+
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-horizontal px-1 gap-1">
           <li>
-            <Link href="/skills">Browse Skills</Link>
+            <Link href="/skills" className={navLink}>
+              Browse Skills
+            </Link>
           </li>
           {isAuthenticated && (
             <li>
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/dashboard" className={navLink}>
+                Dashboard
+              </Link>
             </li>
           )}
         </ul>
       </div>
+
       <div className="navbar-end">
         {isLoading ? (
-          <span className="loading loading-spinner loading-sm"></span>
+          <span className="loading loading-spinner loading-sm text-primary"></span>
         ) : isAuthenticated ? (
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle avatar placeholder"
+              className="btn btn-ghost btn-square"
             >
-              <div className="bg-primary text-primary-content w-10 rounded-full flex items-center justify-center">
-                <span className="text-lg">
-                  {user?.name?.charAt(0).toUpperCase()}
-                </span>
+              <div className="w-9 h-9 flex items-center justify-center border border-primary text-primary font-bold rounded-field">
+                {user?.name?.charAt(0).toUpperCase()}
               </div>
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box 'z-1' mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-10 mt-3 w-52 p-2"
             >
-              <li className="menu-title">{user?.name}</li>
+              <li className="menu-title text-primary">{user?.name}</li>
               <li>
                 <Link href="/dashboard">Dashboard</Link>
               </li>

@@ -1,11 +1,10 @@
 export default function Footer(){
     return(
-<footer className="footer footer-center p-4 bg-base-300 text-base-content">
-    <aside>
-        <p>
-            Built with Next.js 16+DaisyUI-Demonstarting SSG, SSR, ISR, and CSR patterns with Prisma and DaisyUI.
+<footer className="border-t border-base-300 bg-base-100 py-5 text-center">
+      <p className="font-mono text-xs text-base-content/50">
+            Built with Next.js 16+DaisyUI-Demonstrating SSG, SSR, ISR, and CSR patterns with Prisma and DaisyUI.
         </p>
-      </aside>
+  
     </footer>
     );
 }

@@ -4,6 +4,10 @@ import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Providers } from "./components/Providers";
+import { Inter, JetBrains_Mono } from "next/font/google";
+
+const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,8 +38,8 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
-      >
+        className={`${sans.variable} ${mono.variable} font-sans`}>
+      
         <Providers>
           <Header />
           <main className="flex-1">{children}</main>
