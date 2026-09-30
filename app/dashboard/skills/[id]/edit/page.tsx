@@ -200,19 +200,27 @@ export default function EditSkillPage({ params }: PageProps) {
             </div>
 
             <div className="form-control">
-              <label className="label cursor-pointer justify-start gap-4">
-                <input
-                  type="checkbox"
-                  className="toggle toggle-primary"
-                  checked={isPublic}
-                  onChange={(e) => setIsPublic(e.target.checked)}
-                />
-                <span className="label-text">Make this skill public</span>
-              </label>
-              <p className="text-sm text-base-content/60 ml-14">
-                Public skills appear in the gallery and can be viewed by anyone
-              </p>
-            </div>
+  <label className="label cursor-pointer justify-start gap-4">
+    <button
+      type="button"
+      onClick={() => setIsPublic(!isPublic)}
+      className={`relative w-12 h-6 rounded-full transition-colors ${
+        isPublic ? "bg-primary border-primary"
+      : "bg-neutral-600 border-neutral-500"
+      }`}
+    >
+      <span
+        className={`absolute top-0.5 left-0.5 w-5 h-5 bg-base-100 rounded-full transition-transform ${
+          isPublic ? "translate-x-6" : "translate-x-0"
+        }`}
+      />
+    </button>
+    <span className="label-text">Make this skill public</span>
+  </label>
+  <p className="text-sm text-base-content/60 ml-16">
+    Public skills appear in the gallery and can be viewed by anyone
+  </p>
+</div>
 
             <div className="flex justify-end gap-3 pt-4">
               <Link href="/dashboard" className="btn btn-ghost">

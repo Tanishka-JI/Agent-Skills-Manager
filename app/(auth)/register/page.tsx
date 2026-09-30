@@ -56,7 +56,7 @@ export default function RegisterPage() {
 
   return (
     <>
-      <h2 className="card-title text-2xl justify-center">Create Account</h2>
+    <h2 className="card-title text-2xl justify-center font-mono">Create Account</h2>
       <p className="text-center text-base-content/70">
         Join to create and share agent skills
       </p>
@@ -164,14 +164,14 @@ export default function RegisterPage() {
         </div>
       </form>
 
-      <div className="divider">OR</div>
+      <div className="divider text-xs text-base-content/50">OR</div>
 
-      <p className="text-center">
-        Already have an account?{" "}
-        <Link href="/login" className="link link-primary">
-          Sign in
-        </Link>
-      </p>
+<p className="text-center text-sm">
+  Don&apos;t have an account?{" "}
+  <Link href="/register" className="link text-primary">
+    Sign up
+  </Link>
+</p>
     </>
   );
 }

@@ -45,10 +45,10 @@ useEffect(() => {
 
   return (
     <>
-      <h2 className="card-title text-2xl justify-center">Welcome Back</h2>
-      <p className="text-center text-base-content/70">
-        Sign in to manage your agent skills
-      </p>
+      <h2 className="card-title text-2xl justify-center font-mono">Welcome Back</h2>
+<p className="text-center text-base-content/70 text-sm mt-1">
+  Sign in to manage your agent skills
+</p>
 
       <form onSubmit={handleSubmit} className="mt-4">
         {error && (

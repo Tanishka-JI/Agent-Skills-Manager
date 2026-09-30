@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../../../hooks/useAuth";
@@ -20,10 +20,13 @@ export default function NewSkillPage() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // useEffect add karo
+
+useEffect(() => {
   if (!isLoading && !isAuthenticated) {
     router.push("/login");
-    return null;
   }
+}, [isLoading, isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,20 +135,28 @@ export default function NewSkillPage() {
               />
             </div>
 
-            <div className="form-control mt-4">
-              <label className="label cursor-pointer justify-start gap-4">
-                <input
-                  type="checkbox"
-                  className="toggle toggle-primary"
-                  checked={isPublic}
-                  onChange={(e) => setIsPublic(e.target.checked)}
-                />
-                <span className="label-text">Make this skill public</span>
-              </label>
-              <p className="text-sm text-base-content/60 ml-14">
-                Public skills appear in the gallery and can be viewed by anyone
-              </p>
-            </div>
+             <div className="form-control">
+  <label className="label cursor-pointer justify-start gap-4">
+    <button
+      type="button"
+      onClick={() => setIsPublic(!isPublic)}
+      className={`relative w-12 h-6 rounded-full transition-colors ${
+        isPublic ? "bg-primary border-primary"
+      : "bg-neutral-600 border-neutral-500"
+      }`}
+    >
+      <span
+        className={`absolute top-0.5 left-0.5 w-5 h-5 bg-base-100 rounded-full transition-transform ${
+          isPublic ? "translate-x-6" : "translate-x-0"
+        }`}
+      />
+    </button>
+    <span className="label-text">Make this skill public</span>
+  </label>
+  <p className="text-sm text-base-content/60 ml-16">
+    Public skills appear in the gallery and can be viewed by anyone
+  </p>
+</div>
 
             <div className="card-actions justify-end mt-6">
               <Link href="/dashboard" className="btn btn-ghost">
