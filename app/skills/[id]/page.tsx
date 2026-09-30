@@ -30,8 +30,14 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 async function getSkill(id: string) {
-  const skill = await prisma.skill.findUnique({
-    where: { id: parseInt(id), isPublic: true },
+  const skillId = parseInt(id);
+
+  if (isNaN(skillId)) {
+    return null;   // ← invalid id, jaise "create" — turant null return karo
+  }
+
+  const skill = await prisma.skill.findFirst({
+    where: { id: skillId, isPublic: true },
     include: {
       author: {
         select: { name: true },

@@ -1,9 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 import { verifyPassword, generateToken, setAuthCookie } from "../../../lib/auth";
+import { checkRateLimit } from "../../../lib/ratelimit";
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit check
+    const ip = request.headers.get("x-forwarded-for") || "unknown";
+    const { allowed } = checkRateLimit(ip);
+
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many attempts. Please try again in a few minutes." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const { email, password } = body;
 

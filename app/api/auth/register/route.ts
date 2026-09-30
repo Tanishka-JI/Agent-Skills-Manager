@@ -14,6 +14,22 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!emailRegex.test(email)) {
+  return NextResponse.json(
+    { error: "Invalid email format" },
+    { status: 400 }
+  );
+}
+
+// Validate password length
+if (password.length < 6) {
+  return NextResponse.json(
+    { error: "Password must be at least 6 characters" },
+    { status: 400 }
+  );
+}
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({

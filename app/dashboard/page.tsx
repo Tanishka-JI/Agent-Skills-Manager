@@ -24,6 +24,8 @@ export default function DashboardPage() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loadingSkills, setLoadingSkills] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+   const [confirmId, setConfirmId] = useState<number | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -36,6 +38,13 @@ export default function DashboardPage() {
       fetchUserSkills();
     }
   }, [user]);
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
 
   const fetchUserSkills = async () => {
     try {
@@ -55,22 +64,22 @@ export default function DashboardPage() {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!user || !confirm("Are you sure you want to delete this skill?")) {
-      return;
-    }
+  const confirmDelete = async (id: number) => {
+    if (!user) return;
 
+    setConfirmId(null);
     setDeletingId(id);
     try {
       const result = await deleteSkill(id, user.id);
       if (result.success) {
         setSkills(skills.filter((s) => s.id !== id));
+        setToast("Skill deleted");
       } else {
-        alert(result.error || "Failed to delete skill");
+        setToast(result.error || "Failed to delete skill");
       }
     } catch (error) {
       console.error("Delete error:", error);
-      alert("Failed to delete skill");
+      setToast("Failed to delete skill");
     } finally {
       setDeletingId(null);
     }
@@ -90,6 +99,15 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Toast */}
+      {toast && (
+        <div className="toast toast-top toast-end z-50">
+          <div className="alert bg-base-200 border border-primary text-sm">
+            <span>{toast}</span>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -162,25 +180,48 @@ export default function DashboardPage() {
                 <p className="text-base-content/70 text-sm line-clamp-2">
                   {skill.description}
                 </p>
-                <div className="card-actions justify-end mt-4">
-                  <Link
-                    href={`/dashboard/skills/${skill.id}/edit`}
-                    className="btn btn-ghost btn-sm"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(skill.id)}
-                    className="btn btn-error btn-sm btn-outline"
-                    disabled={deletingId === skill.id}
-                  >
-                    {deletingId === skill.id ? (
-                      <span className="loading loading-spinner loading-xs"></span>
-                    ) : (
-                      "Delete"
-                    )}
-                  </button>
-                </div>
+
+                {confirmId === skill.id ? (
+                  // Confirm mode
+                  <div className="flex items-center justify-between mt-4 bg-base-300 rounded-lg px-3 py-2">
+                    <span className="text-sm">Delete this skill?</span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setConfirmId(null)}
+                        className="btn btn-ghost btn-xs"
+                      >
+                        No
+                      </button>
+                      <button
+                        onClick={() => confirmDelete(skill.id)}
+                        className="btn btn-error btn-xs"
+                        disabled={deletingId === skill.id}
+                      >
+                        {deletingId === skill.id ? (
+                          <span className="loading loading-spinner loading-xs"></span>
+                        ) : (
+                          "Yes"
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  // Normal mode
+                  <div className="card-actions justify-end mt-4">
+                    <Link
+                      href={`/dashboard/skills/${skill.id}/edit`}
+                      className="btn btn-ghost btn-sm"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => setConfirmId(skill.id)}
+                      className="btn btn-error btn-sm btn-outline"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))}

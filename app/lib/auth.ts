@@ -112,18 +112,3 @@ export async function getCurrentUser(): Promise<TokenPayload | null> {
   return verifyToken(token);
 }
 
-/**
- * Extract token from cookie in request
- */
-export function extractTokenFromRequest(request: Request): string | null {
-  const cookieHeader = request.headers.get("cookie");
-  if (!cookieHeader) return null;
-  
-  const cookies = cookieHeader.split(";").reduce((acc, cookie) => {
-    const [key, value] = cookie.trim().split("=");
-    acc[key] = value;
-    return acc;
-  }, {} as Record<string, string>);
-  
-  return cookies[AUTH_COOKIE_NAME] ?? null;
-}
