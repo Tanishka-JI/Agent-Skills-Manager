@@ -1,16 +1,22 @@
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 const SALT_ROUNDS = 10;
 const TOKEN_EXPIRY_HOURS = parseInt(process.env.AUTH_TOKEN_EXPIRY_HOURS || "24");
 const AUTH_COOKIE_NAME = "auth_token";
+const JWT_SECRET = process.env.JWT_SECRET as string;
+
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is not set in environment variables");
+}
 
 export interface TokenPayload {
   userId: number;
   email: string;
   name: string;
-  exp: number;
+  
 }
 
 /**
@@ -30,8 +36,7 @@ export async function verifyPassword(
   return bcrypt.compare(password, hash);
 }
 
-/**
- * Generate a simple base64 encoded token with expiration
+/*
  * In production, use a proper JWT library
  */
 export function generateToken(user: {
@@ -39,14 +44,11 @@ export function generateToken(user: {
   email: string;
   name: string;
 }): string {
-  const payload: TokenPayload = {
-    userId: user.id,
-    email: user.email,
-    name: user.name,
-    exp: Date.now() + TOKEN_EXPIRY_HOURS * 60 * 60 * 1000,
-  };
-
-  return Buffer.from(JSON.stringify(payload)).toString("base64");
+  return jwt.sign(
+    { userId: user.id, email: user.email, name: user.name },
+    JWT_SECRET,
+    { expiresIn: `${TOKEN_EXPIRY_HOURS}h` }
+  );
 }
 
 /**
@@ -54,15 +56,7 @@ export function generateToken(user: {
  */
 export function verifyToken(token: string): TokenPayload | null {
   try {
-    const payload = JSON.parse(
-      Buffer.from(token, "base64").toString("utf-8")
-    ) as TokenPayload;
-
-    // Check expiration
-    if (payload.exp < Date.now()) {
-      return null;
-    }
-
+    const payload = jwt.verify(token, JWT_SECRET) as TokenPayload;
     return payload;
   } catch {
     return null;
