@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "../../lib/prisma";
+import CopyMarkdownButton from "./CopyMarkdownButton";
 
 /**
  * Skill Detail Page - Dynamic Route with ISR
@@ -65,6 +66,11 @@ export default async function SkillDetailPage({ params }: PageProps) {
 
       <article className="card bg-base-200 shadow-xl">
         <div className="card-body">
+            <CopyMarkdownButton
+          name={skill.name}
+          description={skill.description}
+          content={skill.content}
+        />
           <div className="flex justify-between items-start">
             <div>
               <h1 className="text-3xl font-bold">{skill.name}</h1>
