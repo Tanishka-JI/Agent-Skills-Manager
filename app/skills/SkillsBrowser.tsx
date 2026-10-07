@@ -116,7 +116,7 @@ export default function SkillsBrowser({
                     </span>
 
                     <span className="font-mono text-xs text-base-content/50">
-                      {new Date(skill.createdAt).toLocaleDateString()}
+                     {new Date(skill.createdAt).toLocaleDateString("en-IN")}
                     </span>
                   </div>
                 </div>
