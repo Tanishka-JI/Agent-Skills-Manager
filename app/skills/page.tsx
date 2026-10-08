@@ -55,6 +55,7 @@ async function getSkills(search: string, page: number) {
       author: {
         select: {
           name: true,
+          id: true,
         },
       },
     },

@@ -8,7 +8,8 @@ type SkillWithAuthor = Prisma.SkillGetPayload<{
   include: {
     author: {
       select: {
-        name: true;
+        id: true,
+        name: true,
       };
     };
   };
@@ -41,7 +42,6 @@ export default function SkillsBrowser({
       params.set("search", searchValue);
     }
 
-    // New search always starts from page 1
     params.set("page", "1");
 
     router.push(`/skills?${params.toString()}`);
@@ -50,7 +50,6 @@ export default function SkillsBrowser({
   function handlePageChange(pageNumber: number) {
     const params = new URLSearchParams();
 
-    // Preserve current search
     if (search) {
       params.set("search", search);
     }
@@ -96,31 +95,39 @@ export default function SkillsBrowser({
         <>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {skills.map((skill) => (
-              <Link
+              <div
                 key={skill.id}
-                href={`/skills/${skill.id}`}
                 className="card bg-base-200"
               >
                 <div className="card-body">
-                  <h2 className="card-title font-mono">
-                    {skill.name}
-                  </h2>
+                  
+                  {/* Skill link */}
+                  <Link href={`/skills/${skill.id}`}>
+                    <h2 className="card-title font-mono">
+                      {skill.name}
+                    </h2>
 
-                  <p className="text-base-content/70 line-clamp-2 text-sm">
-                    {skill.description}
-                  </p>
+                    <p className="text-base-content/70 line-clamp-2 text-sm">
+                      {skill.description}
+                    </p>
+                  </Link>
 
                   <div className="card-actions justify-between items-center mt-4 pt-3 border-t border-base-300">
-                    <span className="font-mono text-xs text-primary">
+                    
+                    {/* Author link */}
+                    <Link
+                      href={`/users/${skill.author.id}/skills`}
+                      className="font-mono text-xs text-primary"
+                    >
                       @{skill.author.name}
-                    </span>
+                    </Link>
 
                     <span className="font-mono text-xs text-base-content/50">
-                     {new Date(skill.createdAt).toLocaleDateString("en-IN")}
+                      {new Date(skill.createdAt).toLocaleDateString("en-IN")}
                     </span>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
 

@@ -41,7 +41,10 @@ async function getSkill(id: string) {
     where: { id: skillId, isPublic: true },
     include: {
       author: {
-        select: { name: true },
+        select: { 
+          name: true,
+          id:true,
+         },
       },
     },
   });
@@ -82,12 +85,28 @@ export default async function SkillDetailPage({ params }: PageProps) {
           <div className="divider"></div>
 
           <div className="flex gap-4 text-sm text-base-content/60 mb-4">
-            <span>By {skill.author.name}</span>
-            <span>•</span>
-            <span>Created {new Date(skill.createdAt).toLocaleDateString()}</span>
-            <span>•</span>
-            <span>Updated {new Date(skill.updatedAt).toLocaleDateString()}</span>
-          </div>
+      <span>
+           By{" "}
+              <Link
+                  href={`/users/${skill.author.id}/skills`}
+                    className="text-primary hover:underline"
+                        >
+                           @{skill.author.name}
+                </Link>
+            </span>
+
+          <span>•</span>
+
+  <span>
+    Created {new Date(skill.createdAt).toLocaleDateString("en-IN")}
+  </span>
+
+  <span>•</span>
+
+  <span>
+    Updated {new Date(skill.updatedAt).toLocaleDateString("en-IN")}
+  </span>
+</div>
 
           <div className="bg-base-300 rounded-lg p-6">
             <h2 className="text-lg font-semibold mb-4">Skill Content</h2>
