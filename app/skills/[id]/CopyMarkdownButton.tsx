@@ -26,6 +26,7 @@ export default function CopyMarkdownButton({
       }, 2000);
     } catch (error) {
       console.error("Failed to copy markdown:", error);
+      alert("Failed to copy. Please try selecting the text manually.");
     }
   };
 

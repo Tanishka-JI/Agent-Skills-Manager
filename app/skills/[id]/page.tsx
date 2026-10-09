@@ -69,11 +69,7 @@ export default async function SkillDetailPage({ params }: PageProps) {
 
       <article className="card bg-base-200 shadow-xl">
         <div className="card-body">
-            <CopyMarkdownButton
-          name={skill.name}
-          description={skill.description}
-          content={skill.content}
-        />
+            
           <div className="flex justify-between items-start">
             <div>
               <h1 className="text-3xl font-bold">{skill.name}</h1>
@@ -109,7 +105,14 @@ export default async function SkillDetailPage({ params }: PageProps) {
 </div>
 
           <div className="bg-base-300 rounded-lg p-6">
+             <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold mb-4">Skill Content</h2>
+            <CopyMarkdownButton
+                name={skill.name}
+                description={skill.description}
+                content={skill.content}
+              />
+          </div>
             <pre className="skill-content whitespace-pre-wrap text-sm">
               {skill.content}
             </pre>

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Prisma } from "@prisma/client";
+import { ArrowUpRight, UserRound } from "lucide-react";
+
 
 type SkillWithAuthor = Prisma.SkillGetPayload<{
   include: {
@@ -115,12 +117,28 @@ export default function SkillsBrowser({
                   <div className="card-actions justify-between items-center mt-4 pt-3 border-t border-base-300">
                     
                     {/* Author link */}
-                    <Link
+                      <Link
                       href={`/users/${skill.author.id}/skills`}
-                      className="font-mono text-xs text-primary"
-                    >
-                      @{skill.author.name}
-                    </Link>
+                        className="inline-flex items-center gap-2 group"
+                         >
+                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-success/10 text-success">
+                             <UserRound size={16} />
+                    </span>
+
+                  <span className="flex flex-col">
+                  <span className="text-[10px] text-base-content/50">
+                            Created by
+                    </span>
+                    <span className="font-mono text-xs text-primary group-hover:underline">
+                                       @{skill.author.name}
+                    </span>
+                  </span>
+
+                  <ArrowUpRight
+                         size={13}
+                     className="text-base-content/50 group-hover:text-primary"
+                    />
+                     </Link>
 
                     <span className="font-mono text-xs text-base-content/50">
                       {new Date(skill.createdAt).toLocaleDateString("en-IN")}
