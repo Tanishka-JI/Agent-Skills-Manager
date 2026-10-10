@@ -11,7 +11,7 @@ model User{
   name     String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
+likes  Like[]
   @@map("users")
   skills Skill[]
 }
@@ -26,8 +26,20 @@ model Skill{
   author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
+  likes  Like[]
   @@map("skills")
 }
 
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  skillId   Int      @map("skill_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  user  User  @relation(fields: [userId], references: [id])
+  skill Skill @relation(fields: [skillId], references: [id])
+
+  @@unique([userId, skillId])
+  @@map("likes")
+    }
 
 
