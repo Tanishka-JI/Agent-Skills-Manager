@@ -167,7 +167,10 @@ export default function DashboardPage() {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {skills.map((skill) => (
-            <div key={skill.id} className="card bg-base-200">
+            <div key={skill.id} 
+            className="card bg-base-200 cursor-pointer hover:shadow-lg transition-shadow"
+             onClick={() => router.push(`/skills/${skill.id}`)}
+            >
               <div className="card-body">
                 <div className="flex justify-between items-start">
                   <h3 className="card-title text-lg">{skill.name}</h3>
@@ -187,13 +190,19 @@ export default function DashboardPage() {
                     <span className="text-sm">Delete this skill?</span>
                     <div className="flex gap-2">
                       <button
-                        onClick={() => setConfirmId(null)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setConfirmId(null);
+                        }}
                         className="btn btn-ghost btn-xs"
                       >
                         No
                       </button>
                       <button
-                        onClick={() => confirmDelete(skill.id)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            confirmDelete(skill.id);
+                          }}
                         className="btn btn-error btn-xs"
                         disabled={deletingId === skill.id}
                       >
@@ -210,12 +219,16 @@ export default function DashboardPage() {
                   <div className="card-actions justify-end mt-4">
                     <Link
                       href={`/dashboard/skills/${skill.id}/edit`}
+                       onClick={(e) => e.stopPropagation()}
                       className="btn btn-ghost btn-sm"
                     >
                       Edit
                     </Link>
                     <button
-                      onClick={() => setConfirmId(skill.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setConfirmId(skill.id);
+                      }}
                       className="btn btn-error btn-sm btn-outline"
                     >
                       Delete

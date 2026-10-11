@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "../lib/prisma";
 import SkillsBrowser from "./SkillsBrowser";
 
+
 export const revalidate = 60;
 
 export const metadata = {
