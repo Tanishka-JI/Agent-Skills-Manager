@@ -93,9 +93,14 @@ export async function deleteSkill(
       return { success: false, error: "Not authorized to delete this skill" };
     }
 
-    await prisma.skill.delete({
-      where: { id },
-    });
+    await prisma.$transaction([
+  prisma.like.deleteMany({
+    where: { skillId: id },
+  }),
+  prisma.skill.delete({
+    where: { id },
+  }),
+]);
 
     revalidatePath("/skills");
     revalidatePath("/dashboard");
