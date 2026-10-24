@@ -37,9 +37,19 @@ export default function Header() {
               <Link href="/skills">Browse Skills</Link>
             </li>
             {isAuthenticated && (
-              <li>
-                <Link href="/dashboard">Dashboard</Link>
-              </li>
+              
+              <>
+                <li>
+                  <Link href="/dashboard">Dashboard</Link>
+                </li>
+                <li>
+                  <Link href="/liked-skills">
+                    Liked Skills❤️ 
+                  </Link>
+                </li>
+              </>
+
+              
             )}
           </ul>
         </div>
@@ -91,6 +101,11 @@ export default function Header() {
               </li>
               <li>
                 <Link href="/dashboard/skills/new">Create Skill</Link>
+              </li>
+              <li>
+              <Link href="/liked-skills">
+                   Liked Skills❤️ 
+                </Link>
               </li>
               <li>
                 <button onClick={logout}>Logout</button>

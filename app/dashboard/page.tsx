@@ -14,6 +14,7 @@ interface Skill {
   createdAt: string;
 }
 
+
 /**
  * Dashboard Page - Client Component with httpOnly Cookie Auth
  * Uses cookies (sent automatically) for authentication
@@ -26,6 +27,7 @@ export default function DashboardPage() {
   const [deletingId, setDeletingId] = useState<number | null>(null);
    const [confirmId, setConfirmId] = useState<number | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+ 
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -36,6 +38,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (user) {
       fetchUserSkills();
+    
     }
   }, [user]);
   useEffect(() => {
@@ -63,6 +66,8 @@ export default function DashboardPage() {
       setLoadingSkills(false);
     }
   };
+
+
 
   const confirmDelete = async (id: number) => {
     if (!user) return;
@@ -240,6 +245,7 @@ export default function DashboardPage() {
           ))}
         </div>
       )}
+      
     </div>
   );
 }
