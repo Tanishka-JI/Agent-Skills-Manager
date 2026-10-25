@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../hooks/useAuth";
@@ -23,7 +23,9 @@ export default function LikedSkillsPage() {
   const [likedSkills, setLikedSkills] = useState<LikedSkill[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+ const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+ const [isSortOpen, setIsSortOpen] = useState(false);
+const sortRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function LikedSkillsPage() {
       router.replace("/login");
       return;
     }
+    
 
     const fetchLikedSkills = async () => {
       try {
@@ -59,6 +62,24 @@ export default function LikedSkillsPage() {
 
     fetchLikedSkills();
   }, [authLoading, isAuthenticated, router]);
+        useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => { 
+      if(sortRef.current && !sortRef.current.contains(event.target as Node)){
+        setIsSortOpen(false);
+      } 
+    }
+    function handleEscapeKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsSortOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscapeKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, []);
 
   if (authLoading || loading) {
     return (
@@ -72,7 +93,20 @@ export default function LikedSkillsPage() {
     return null;
   }
 
+   const sortedLikes=[...likedSkills].sort((a, b) => {
+    if (sortOrder === "newest") {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  });
+
+   
+
+   
+
+
   return (
+     
     <main className="max-w-6xl mx-auto px-4 py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">❤️ Liked Skills</h1>
@@ -80,12 +114,56 @@ export default function LikedSkillsPage() {
           All the skills you have liked in one place.
         </p>
       </div>
+            
+<div className="flex justify-end mb-4">
+  {sortedLikes.length > 1 && (
+    <div className="relative" ref={sortRef}>
+      <button
+        type="button"
+        onClick={() => setIsSortOpen((prev) => !prev)}
+      className="btn btn-sm bg-[#18251c] text-[#a3ffb0] border border-[#39ff88]/40 hover:bg-[#223b2a]"
+        aria-expanded={isSortOpen}
+        aria-haspopup="true"
+      >
+        Sort
+        <span className="text-xs">▼</span>
+      </button>
+
+      {isSortOpen && (
+        <div className="absolute right-0 top-full mt-2 z-20 w-40 rounded-lg border border-base-300 bg-base-200 shadow-lg p-1">
+          <button
+            type="button"
+            onClick={() => {
+              setSortOrder("newest");
+              setIsSortOpen(false);
+            }}
+            className="block w-full text-left rounded-md px-3 py-2 text-sm hover:bg-base-300"
+          >
+            Newest first
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSortOrder("oldest");
+              setIsSortOpen(false);
+            }}
+            className="block w-full text-left rounded-md px-3 py-2 text-sm hover:bg-base-300"
+          >
+            Oldest first
+          </button>
+        </div>
+      )}
+    </div>
+  )}
+</div>
+
 
       {error ? (
         <div className="alert alert-error">
           <span>{error}</span>
         </div>
-      ) : likedSkills.length === 0 ? (
+      ) : sortedLikes.length === 0 ? (
         <div className="text-center py-16 border border-base-300 rounded-xl">
           <div className="text-5xl mb-4">🤍</div>
 
@@ -104,12 +182,12 @@ export default function LikedSkillsPage() {
       ) : (
         <>
           <p className="text-sm text-base-content/70 mb-5">
-            {likedSkills.length}{" "}
-            {likedSkills.length === 1 ? "skill" : "skills"} liked
+            {sortedLikes.length}{" "}
+            {sortedLikes.length === 1 ? "Skill" : "Skills"} liked...
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {likedSkills.map((item) => (
+            {sortedLikes.map((item) => (
               <Link
                 key={item.id}
                 href={`/skills/${item.skill.id}?from=liked-skills`}
