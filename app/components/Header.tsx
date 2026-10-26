@@ -13,7 +13,12 @@ export default function Header() {
     <div className="navbar bg-base-200/60 backdrop-blur border-b border-base-300 px-4">
       <div className="navbar-start">
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+          <button
+            type="button"
+            tabIndex={0}
+            className="btn btn-ghost lg:hidden"
+            aria-label="Toggle navigation menu"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -28,28 +33,28 @@ export default function Header() {
                 d="M4 6h16M4 12h8m-8 6h16"
               />
             </svg>
-          </div>
+          </button>
+
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-10 mt-3 w-52 p-2"
+            className="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-50 mt-3 w-52 p-2 shadow"
           >
             <li>
               <Link href="/skills">Browse Skills</Link>
             </li>
+
             {isAuthenticated && (
-              
               <>
                 <li>
                   <Link href="/dashboard">Dashboard</Link>
                 </li>
                 <li>
-                  <Link href="/liked-skills">
-                    Liked Skills❤️ 
-                  </Link>
+                  <Link href="/liked-skills">Liked Skills ❤️</Link>
+                </li>
+                <li>
+                  <button onClick={logout}>Logout</button>
                 </li>
               </>
-
-              
             )}
           </ul>
         </div>
@@ -79,9 +84,9 @@ export default function Header() {
 
       <div className="navbar-end">
         {isLoading ? (
-          <span className="loading loading-spinner loading-sm text-primary"></span>
+          <span className="loading loading-spinner loading-sm text-primary" />
         ) : isAuthenticated ? (
-          <div className="dropdown dropdown-end">
+          <div className="dropdown dropdown-end hidden lg:flex">
             <div
               tabIndex={0}
               role="button"
@@ -91,6 +96,7 @@ export default function Header() {
                 {user?.name?.charAt(0).toUpperCase()}
               </div>
             </div>
+
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-10 mt-3 w-52 p-2"
@@ -103,9 +109,7 @@ export default function Header() {
                 <Link href="/dashboard/skills/new">Create Skill</Link>
               </li>
               <li>
-              <Link href="/liked-skills">
-                   Liked Skills❤️ 
-                </Link>
+                <Link href="/liked-skills">Liked Skills ❤️</Link>
               </li>
               <li>
                 <button onClick={logout}>Logout</button>

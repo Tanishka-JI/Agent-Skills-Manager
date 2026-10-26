@@ -53,6 +53,7 @@ export default function RegisterPage() {
       setIsSubmitting(false);
     }
   };
+  
 
   return (
     <>
