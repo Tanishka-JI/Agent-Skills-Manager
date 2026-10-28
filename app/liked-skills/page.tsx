@@ -28,6 +28,12 @@ export default function LikedSkillsPage() {
 const sortRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
+
+    function saveScrollPosition() {
+      sessionStorage.setItem("skills-scroll", String(window.scrollY));
+    }
+
+
   useEffect(() => {
     if (authLoading) return;
 
@@ -62,12 +68,30 @@ const sortRef = useRef<HTMLDivElement>(null);
 
     fetchLikedSkills();
   }, [authLoading, isAuthenticated, router]);
+
+//for restoring cuurent positon where user left off when they click on a skill and then return back to the liked skills page
+  useEffect(() => {
+  if (loading) return;
+
+  const saved = sessionStorage.getItem("skills-scroll");
+  if (saved === null) return;
+
+  requestAnimationFrame(() => {
+    window.scrollTo(0, Number(saved));
+    sessionStorage.removeItem("skills-scroll");
+  });
+}, [loading, likedSkills]);
+      
+
+
         useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => { 
       if(sortRef.current && !sortRef.current.contains(event.target as Node)){
         setIsSortOpen(false);
       } 
     }
+
+    
     function handleEscapeKey(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setIsSortOpen(false);
@@ -75,11 +99,15 @@ const sortRef = useRef<HTMLDivElement>(null);
     }
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscapeKey);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscapeKey);
     };
   }, []);
+       
+  
+
 
   if (authLoading || loading) {
     return (
@@ -99,10 +127,6 @@ const sortRef = useRef<HTMLDivElement>(null);
     }
     return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
   });
-
-   
-
-   
 
 
   return (
@@ -191,6 +215,7 @@ const sortRef = useRef<HTMLDivElement>(null);
               <Link
                 key={item.id}
                 href={`/skills/${item.skill.id}?from=liked-skills`}
+               onClick={saveScrollPosition}
                 className="card bg-base-200 border border-base-300 hover:border-primary hover:shadow-lg transition-all"
               >
                 <div className="card-body">

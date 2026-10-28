@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Prisma } from "@prisma/client";
 import { ArrowUpRight, UserRound } from "lucide-react";
+import { useEffect } from "react";
 
 
 type SkillWithAuthor = Prisma.SkillGetPayload<{
@@ -32,6 +33,21 @@ export default function SkillsBrowser({
 }: SkillsBrowserProps) {
   const router = useRouter();
 
+  function saveScrollPosition() {
+  sessionStorage.setItem("skills-scroll", String(window.scrollY));
+}
+          useEffect(() => {
+        const saved = sessionStorage.getItem("skills-scroll");
+
+        if (saved !== null) {
+          requestAnimationFrame(() => {
+            window.scrollTo(0, Number(saved));
+            sessionStorage.removeItem("skills-scroll");
+          });
+        }
+      }, []);
+
+      
   function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -104,7 +120,10 @@ export default function SkillsBrowser({
                 <div className="card-body">
                   
                   {/* Skill link */}
-                  <Link href={`/skills/${skill.id}`}>
+                  <Link href={`/skills/${skill.id}`}
+                  onClick={saveScrollPosition}
+                  >
+                   
                     <h2 className="card-title font-mono">
                       {skill.name}
                     </h2>
