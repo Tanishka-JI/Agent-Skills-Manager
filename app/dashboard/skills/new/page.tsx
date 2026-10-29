@@ -40,16 +40,13 @@ useEffect(() => {
     setIsSubmitting(true);
 
     try {
-      const result = await createSkill(
-        {
-          name: name.trim(),
-          description: description.trim(),
-          content: content.trim(),
-          isPublic,
-        },
-        user!.id
-      );
-
+      
+       const result = await createSkill({
+      name: name.trim(),
+      description: description.trim(),
+      content: content.trim(),
+      isPublic,
+    });
       if (result.success) {
         router.push("/dashboard");
       } else {
