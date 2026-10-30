@@ -86,7 +86,7 @@ export default function SkillsBrowser({
           type="text"
           placeholder="Search skills..."
           defaultValue={search}
-          className="input input-bordered flex-1"
+          className="border border-white/40 rounded-lg bg-transparent px-4 py-3 text-white placeholder:text-gray-400 focus:border-white focus:outline-none"
         />
 
         <button type="submit" className="btn btn-primary">

@@ -169,8 +169,8 @@ export default function RegisterPage() {
 
 <p className="text-center text-sm">
   Don&apos;t have an account?{" "}
-  <Link href="/register" className="link text-primary">
-    Sign up
+  <Link href="/login" className="link text-primary">
+    Login in
   </Link>
 </p>
     </>
