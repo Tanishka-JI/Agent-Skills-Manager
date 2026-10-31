@@ -16,6 +16,9 @@ export async function GET() {
     const likes = await prisma.like.findMany({
       where: {
         userId: user.userId,
+          skill: {
+    isPublic: true,
+  },
       },
       select: {
         id: true,
@@ -33,7 +36,7 @@ export async function GET() {
 
     return NextResponse.json({ likes });
   } catch (error) {
-    console.error("Failed to fetch liked skills:", error);
+    console.error("ACTUAL LIKES API ERROR:", error);
 
     return NextResponse.json(
       { error: "Failed to fetch liked skills" },
